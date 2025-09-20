@@ -143,3 +143,38 @@ CREATE INDEX idx_papers_year ON system_papers(год_публикации);
 CREATE INDEX idx_benchmarks_source ON benchmarks(источник);
 CREATE INDEX idx_benchmark_results_rank ON benchmark_results(ранг);
 CREATE INDEX idx_benchmark_results_metric ON benchmark_results(метрика_тип);
+
+
+-- Модуль 2
+
+CREATE TYPE sd_types AS ENUM ('зависимая', 'независимая', 'адаптивная');
+CREATE TABLE SPEAKER_DEPENDENCY_TYPES ( 
+	speaker_dep_id SERIAL PRIMARY KEY,
+	speaker_dep_type sd_types,
+	description TEXT,
+	learning_require BOOLEAN NOT NULL DEFAULT TRUE,
+	);
+
+CREATE TYPE sp_types AS ENUM ('дискретная', 'непрерывная', 'спонтанная');
+CREATE TABLE SPEECH_TYPES ( 
+	speech_id SERIAL PRIMARY KEY,
+	speech_type sp_types,
+	description TEXT,
+	issues TEXT,
+	);
+
+CREATE TABLE SYSTEM_SPEAKERS ( 
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	speaker_dep_id INTEGER NOT NULL,
+	system_id INTEGER NOT NULL,
+	FOREIGN KEY (speaker_dep_id) REFERENCES SPEAKER_DEPENDENCY_TYPES(speaker_dep_id) ON DELETE CASCADE,
+	FOREIGN KEY (system_id) REFERENCES systems(system_id) ON DELETE CASCADE,
+	);
+
+CREATE TABLE SYSTEM_SPEECH ( 
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	speech_id INTEGER NOT NULL,
+	system_id INTEGER NOT NULL,
+	FOREIGN KEY (speech_id) REFERENCES SYSTEM_SPEAKERS(speech_id) ON DELETE CASCADE,
+	FOREIGN KEY (system_id) REFERENCES systems(system_id) ON DELETE CASCADE,
+	);
