@@ -81,3 +81,28 @@
 - `ссылка_на_статью` (VARCHAR) - ссылка на статью
 - `ссылка_на_код` (VARCHAR) - ссылка на код
 - `дата_отправки` (DATE) - дата отправки результата
+
+## Модуль 2. Зависимость от диктора и тип речи
+Классификация по адаптивности к говорящему и по характеру речевого сигнала.
+
+### 8. speaker_dependency_types
+- `speaker_dep_id` (INTEGER, PRIMARY KEY)
+- `speaker_dep_type` (VARCHAR) - тип речи ("зависимая", "независимая", "адаптивная")
+- `description` (TEXT) - описание
+- `learning_require` (BOOLEAN) - требуется обучение
+
+### 9. speech_types
+- `speech_id` (INTEGER, PRIMARY KEY)
+- `speech_type` (VARCHAR) - тип речевого сигнала ("дискретная", "непрерывная", "спонтанная")
+- `description` (TEXT) - описание
+- `issues` (TEXT) - ключевые проблемы
+
+## Связи
+
+### Связь многие-ко-многим: systems ↔ speaker_dependency_types
+- Таблица связи: `system_speakers`
+- Атрибуты: `system_id`, `speaker_dep_id`
+
+### Связь многие-ко-многим: systems ↔ speech_types 
+- Таблица связи: `system_speech`
+- Атрибуты: `system_id`, `speech_id`
